@@ -1,0 +1,8 @@
+{
+  "name": "adventofcode",
+  "version": "1.0.0",
+  "description": "Solutions to adventofcode",
+  "dependencies": {
+    "crypto": "0.0.3"
+  }
+}
