@@ -4,10 +4,10 @@ var fs = require('fs');
 var input = fs.readFileSync('input.txt','utf8').split('\n').slice(0,-1);
 
 //Part 1
-console.log(input.filter(isNiceFirst).length);
+console.log(input.filter(isNiceFirst).length + " nice words the first time around.");
 
 //Part 2
-console.log(input.filter(isNiceSecond).length);
+console.log(input.filter(isNiceSecond).length + " nice words the second time around.");
 
 function isNiceFirst(str){
   var vowels = str.match(/[aeiou]/gi);
