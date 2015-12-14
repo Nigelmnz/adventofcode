@@ -20,13 +20,8 @@ function findBestSeating(dataTable){
     if(build.length === Object.keys(dataTable).length){
       return processSeating(build);
     }else{
-      var max = 0;
-      for(let subject of Object.keys(dataTable)){
-        if(build.indexOf(subject) === -1){
-          max = Math.max(max,findMax(build.concat([subject])))
-        }
-      }
-      return max;
+      var bestPerms = Object.keys(dataTable).filter(x => build.indexOf(x) === -1).map(x => findMax(build.concat([x])))
+      return Math.max.apply(null,bestPerms);
     }
   }
 
