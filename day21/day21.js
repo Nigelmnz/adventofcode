@@ -4,10 +4,11 @@
 var _ = require('lodash');
 var fs = require('fs');
 var cmb = require('js-combinatorics');
+var enemyInput = fs.readFileSync('input.txt','utf8').split('\n').slice(0,-1);
 var shopInput = fs.readFileSync('shop.txt','utf8').split('\n').slice(0,-1);
 
-var player = {health:100,armor:0,damage:0};
-var enemy = {health:100,armor:2,damage:8}; //Boss info from site
+var player = {'Hit Points':100,Armor:0,Damage:0};
+var enemy = parseEnemy(enemyInput);
 var shop = generateShop(shopInput);
 
 //Part 1
@@ -72,7 +73,7 @@ function generateShop(data){
       mode = item.match(/(.*):/)[1];
     }else if(item.length > 0){
       var parsed = item.match(/(\S*|\S*\s\S*)\s+(\d*)\s+(\d*)\s+(\d*)/).map(x => parseInt(x));
-      result[mode].push({cost:parsed[2],damage:parsed[3],armor:parsed[4]});
+      result[mode].push({cost:parsed[2],Damage:parsed[3],Armor:parsed[4]});
     }
   }
   return result;
@@ -85,14 +86,14 @@ function isWinningGame(p1,p2){
     //Hit enemy
     attack(heroUnit,bossUnit);
 
-    if(bossUnit.health <= 0){
+    if(bossUnit['Hit Points'] <= 0){
       return true;
     }
 
     //Enemy hits back
     attack(bossUnit,heroUnit);
 
-    if(heroUnit.health <= 0){
+    if(heroUnit['Hit Points']<= 0){
       return false;
     }
   }
@@ -100,11 +101,22 @@ function isWinningGame(p1,p2){
 
 function equip(unit,item){
   var newUnit = _.clone(unit);
-  newUnit.damage += item.damage;
-  newUnit.armor += item.armor;
+  newUnit.Damage += item.Damage;
+  newUnit.Armor += item.Armor;
   return newUnit;
 }
 
 function attack(atk,def){
-  def.health -= Math.max(1,atk.damage-def.armor);
+  def['Hit Points'] -= Math.max(1,atk.Damage-def.Armor);
+}
+
+function parseEnemy(data){
+  var result = {};
+
+  for(let stat of data){
+    var parsed = stat.match(/(.*): (\d*)/);
+    result[parsed[1]] = parseInt(parsed[2]);
+  }
+
+  return result;
 }
